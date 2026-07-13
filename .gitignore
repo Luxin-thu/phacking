@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+*.npz
+*.timing.json
+real_data_accelerated_*.Rdata
