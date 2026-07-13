@@ -15,20 +15,24 @@ make_block <- function(analysis, design, pvals) {
   )
 }
 
-num_rep <- Sys.getenv("NUM_REP", "10000")
+args <- commandArgs(trailingOnly = TRUE)
+num_rep <- if (length(args) >= 1) args[[1]] else "10000"
 
 result_p1 <- load_result(sprintf("real_data_top4_accelerated_p0.1_B%s.Rdata", num_rep))
 result_p01 <- load_result(sprintf("real_data_top4_accelerated_p0.01_B%s.Rdata", num_rep))
 result_p001 <- load_result(sprintf("real_data_top4_accelerated_p0.001_B%s.Rdata", num_rep))
+result_p0001 <- load_result(sprintf("real_data_top4_accelerated_p0.0001_B%s.Rdata", num_rep))
 
 design_levels <- c(
   "SRE",
   "ReP (p=0.1)",
   "ReP (p=0.01)",
   "ReP (p=0.001)",
+  "ReP (p=0.0001)",
   "ReM (p=0.1)",
   "ReM (p=0.01)",
-  "ReM (p=0.001)"
+  "ReM (p=0.001)",
+  "ReM (p=0.0001)"
 )
 analysis_levels <- c("FE", "Lin")
 
@@ -37,13 +41,16 @@ plot_data <- rbind(
   make_block("FE", "ReP (p=0.1)", result_p1$hacked_p_vec_rep_mn),
   make_block("FE", "ReP (p=0.01)", result_p01$hacked_p_vec_rep_mn),
   make_block("FE", "ReP (p=0.001)", result_p001$hacked_p_vec_rep_mn),
+  make_block("FE", "ReP (p=0.0001)", result_p0001$hacked_p_vec_rep_mn),
   make_block("Lin", "SRE", result_p1$hacked_p_vec_cre_ss),
   make_block("Lin", "ReP (p=0.1)", result_p1$hacked_p_vec_rep_ss),
   make_block("Lin", "ReP (p=0.01)", result_p01$hacked_p_vec_rep_ss),
   make_block("Lin", "ReP (p=0.001)", result_p001$hacked_p_vec_rep_ss),
+  make_block("Lin", "ReP (p=0.0001)", result_p0001$hacked_p_vec_rep_ss),
   make_block("Lin", "ReM (p=0.1)", result_p1$hacked_p_vec_rem_ss),
   make_block("Lin", "ReM (p=0.01)", result_p01$hacked_p_vec_rem_ss),
-  make_block("Lin", "ReM (p=0.001)", result_p001$hacked_p_vec_rem_ss)
+  make_block("Lin", "ReM (p=0.001)", result_p001$hacked_p_vec_rem_ss),
+  make_block("Lin", "ReM (p=0.0001)", result_p0001$hacked_p_vec_rem_ss)
 )
 
 plot_data$design <- factor(plot_data$design, levels = design_levels)
@@ -103,7 +110,7 @@ p <- ggplot(plot_data, aes(x = p)) +
 ggsave(
   sprintf("top4_simulation_pvalue_density_B%s.png", num_rep),
   p,
-  width = 19,
+  width = 22,
   height = 7.2,
   dpi = 220
 )
@@ -111,6 +118,6 @@ ggsave(
 ggsave(
   sprintf("top4_simulation_pvalue_density_B%s.pdf", num_rep),
   p,
-  width = 19,
+  width = 22,
   height = 7.2
 )
