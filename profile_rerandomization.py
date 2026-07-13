@@ -39,6 +39,38 @@ def local_rep_ok_segment(X, z, offset, n, n1, threshold_t):
 
 
 @njit
+def local_rep_t_segment(X, z, offset, n, n1):
+    K = X.shape[1]
+    n0 = n - n1
+    sx = np.zeros(K)
+    sx2 = np.zeros(K)
+    total = np.zeros(K)
+    total2 = np.zeros(K)
+    for ii in range(n):
+        i = offset + ii
+        for a in range(K):
+            x = X[i, a]
+            total[a] += x
+            total2[a] += x * x
+            if z[i] == 1:
+                sx[a] += x
+                sx2[a] += x * x
+    max_t = 0.0
+    for a in range(K):
+        sx0 = total[a] - sx[a]
+        sx20 = total2[a] - sx2[a]
+        d = sx[a] / n1 - sx0 / n0
+        ss1 = sx2[a] - sx[a] * sx[a] / n1
+        ss0 = sx20 - sx0 * sx0 / n0
+        den = np.sqrt(max(ss1, 0.0) / (n1 * n1) + max(ss0, 0.0) / (n0 * n0))
+        if den > 0:
+            t = abs(d) / den
+            if t > max_t:
+                max_t = t
+    return max_t
+
+
+@njit
 def profile_rem_segment_once(X, offset, n, n1, invcov, threshold, seed, max_attempts):
     N = X.shape[0]
     z = np.zeros(N, dtype=np.uint8)

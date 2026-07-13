@@ -8,4 +8,11 @@ smoke_*.Rdata
 simulation_*.png
 simulation_*.pdf
 simulation_*.csv
+top4_simulation_*.png
+top4_simulation_*.pdf
+top4_simulation_*.csv
+real_data_top4_accelerated_*.Rdata
+SRE_real_data_sharp_null_top4.Rdata
+top4_thresholds_*.npz
 run_*.log
+*.dta
