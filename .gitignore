@@ -17,5 +17,11 @@ top4_er_lines_*.csv
 real_data_top4_accelerated_*.Rdata
 SRE_real_data_sharp_null_top4.Rdata
 top4_thresholds_*.npz
+stratum_cre_B*.Rdata
+stratum_cre_B*.csv
+stratum_cre_lines_B*.png
+stratum_cre_lines_B*.pdf
+stratum_cre_lines_B*.csv
+stratum_cre*_thresholds_*.npz
 run_*.log
 *.dta
