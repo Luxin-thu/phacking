@@ -15,9 +15,11 @@ make_block <- function(analysis, design, pvals) {
   )
 }
 
-result_p1 <- load_result("real_data_top4_accelerated_p0.1_B1000.Rdata")
-result_p01 <- load_result("real_data_top4_accelerated_p0.01_B1000.Rdata")
-result_p001 <- load_result("real_data_top4_accelerated_p0.001_B1000.Rdata")
+num_rep <- Sys.getenv("NUM_REP", "10000")
+
+result_p1 <- load_result(sprintf("real_data_top4_accelerated_p0.1_B%s.Rdata", num_rep))
+result_p01 <- load_result(sprintf("real_data_top4_accelerated_p0.01_B%s.Rdata", num_rep))
+result_p001 <- load_result(sprintf("real_data_top4_accelerated_p0.001_B%s.Rdata", num_rep))
 
 design_levels <- c(
   "SRE",
@@ -59,7 +61,11 @@ er_data$y <- 4.65
 
 summary_table <- er_data[, c("analysis", "design", "er")]
 summary_table <- summary_table[order(summary_table$analysis, summary_table$design), ]
-write.csv(summary_table, "top4_simulation_er_summary_B1000.csv", row.names = FALSE)
+write.csv(
+  summary_table,
+  sprintf("top4_simulation_er_summary_B%s.csv", num_rep),
+  row.names = FALSE
+)
 
 p <- ggplot(plot_data, aes(x = p)) +
   geom_histogram(
@@ -95,7 +101,7 @@ p <- ggplot(plot_data, aes(x = p)) +
   )
 
 ggsave(
-  "top4_simulation_pvalue_density_B1000.png",
+  sprintf("top4_simulation_pvalue_density_B%s.png", num_rep),
   p,
   width = 19,
   height = 7.2,
@@ -103,7 +109,7 @@ ggsave(
 )
 
 ggsave(
-  "top4_simulation_pvalue_density_B1000.pdf",
+  sprintf("top4_simulation_pvalue_density_B%s.pdf", num_rep),
   p,
   width = 19,
   height = 7.2
