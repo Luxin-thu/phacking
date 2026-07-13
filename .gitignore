@@ -1,5 +1,11 @@
 __pycache__/
+.venv/
 *.pyc
 *.npz
 *.timing.json
 real_data_accelerated_*.Rdata
+smoke_*.Rdata
+simulation_*.png
+simulation_*.pdf
+simulation_*.csv
+run_*.log
